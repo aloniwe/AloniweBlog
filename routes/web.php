@@ -12,8 +12,9 @@
 */
 
 
-Route::get('/','PagesControllers@main');
 
+Route::get('/[0-9]+','PagesControllers@article');
+Route::get('/','PagesControllers@main');
 
 Auth::routes();
 

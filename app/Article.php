@@ -5,24 +5,21 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class Article extends Model
 {
+    //
     // attributes
-    protected $fillable = ['title', 'slug', 'parent_id', 'published', 'created_by', 'modified_by'];
+    protected $fillable = ['title', 'slug', 'description_short','description','image','image_show','meta_title',
+        'meta_description','meta_keyword', 'published', 'created_by', 'modified_by'];
     // slug generation
     public function setSlugAttribute($value) {
         $this->attributes['slug'] = Str::slug( mb_substr($this->title, 0, 40) . "-" . \Carbon\Carbon::now()->format('dmyHi'), '-');
     }
-    // Get children category
-    public function children() {
-        return $this->hasMany(self::class, 'parent_id');
-    }
-    public function articles()
+    public function categories()
     {
-        return $this->morphedByMany('App\Article','categoryable');
+        return $this->morphToMany('App\Category','categoryable');
     }
-
-    public function scopeLastCategories($query,$count)
+    public function scopeLastArticles($query,$count)
     {
         return $query->orderBy('created_at', 'desc')->take($count)->get();
     }
